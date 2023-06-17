@@ -2,6 +2,9 @@ from __future__ import print_function
 __author__ = 'Tony Beltramelli - www.tonybeltramelli.com'
 
 import os
+#from skimage.transform import resize
+import numpy as np
+import cv2
 
 from classes.Vocabulary import *
 from classes.Utils import *
@@ -72,6 +75,9 @@ class Dataset:
         print("Vocabulary size: {}".format(self.voc.size))
 
         self.input_shape = self.input_images[0].shape
+
+        #self.input_shape = cv2.resize(self.input_shape,(200, 200))   #resize(self.input_shape,(200,200))
+
         self.output_size = self.voc.size
 
         print("Input shape: {}".format(self.input_shape))
@@ -106,7 +112,7 @@ class Dataset:
             label = a[j + CONTEXT_LENGTH]
 
             self.ids.append(sample_id)
-            self.input_images.append(img)
+            self.input_images.append(img)  #
             self.partial_sequences.append(context)
             self.next_words.append(label)
 
@@ -141,4 +147,4 @@ class Dataset:
         return temp
 
     def save_metadata(self, path):
-        np.save("{}/meta_dataset".format(path), np.array([self.input_shape, self.output_size, self.size]))
+        np.save("{}/meta_dataset".format(path), np.array([self.input_shape, self.output_size, self.size],dtype=object))
